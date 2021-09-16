@@ -10,9 +10,10 @@ const Minter = (props) => {
   //State variables
   const [walletAddress, setWallet] = useState("0xB9DB1902083cFbeeC905937e8e21e1b701267A17");
   const [status, setStatus] = useState("");
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [url, setURL] = useState("");
+  const [name, setName] = useState("Test");
+  const [description, setDescription] = useState("test2");
+  const [count, setCount] = useState("1");
+  const [url, setURL] = useState("test3");
 
   useEffect(async () => { //TODO: implement
     const { address, status } = await getCurrentWalletConnected();
@@ -29,7 +30,7 @@ const Minter = (props) => {
   };
 
   const onMintPressed = async () => {
-    const { status } = await mintNFT(url, name, description);
+    const { status } = await mintNFT(url, name, description, count);
     setStatus(status);
   };
 
@@ -38,7 +39,7 @@ const Minter = (props) => {
       window.ethereum.on("accountsChanged", (accounts) => {
         if (accounts.length > 0) {
           setWallet(accounts[0]);
-          setStatus("👆🏽 Write a message in the text-field above.");
+          setStatus("");
         } else {
           setWallet("");
           setStatus("🦊 Connect to Metamask using the top right button.");
@@ -59,49 +60,51 @@ const Minter = (props) => {
   }
 
   return (
-    <div className="Minter">
-      <button id="walletButton" onClick={connectWalletPressed}>
-        {walletAddress.length > 0 ? (
-          "Connected: " +
-          String(walletAddress).substring(0, 6) +
-          "..." +
-          String(walletAddress).substring(38)
-        ) : (
-          <span>Connect Wallet</span>
-        )}
-      </button>
+    <div className="container mt-5">
 
-      <br></br>
-      <h1 id="title">🧙‍♂️ Alchemy NFT Minter</h1>
-      <p>
-        Simply add your asset's link, name, and description, then press "Mint."
-      </p>
-      <form>
-        <h2>🖼 Link to asset: </h2>
-        <input
-          type="text"
-          placeholder="e.g. https://gateway.pinata.cloud/ipfs/<hash>"
-          onChange={(event) => setURL(event.target.value)}
-        />
-        <h2>🤔 Name: </h2>
-        <input
-          type="text"
-          placeholder="e.g. My first NFT!"
-          onChange={(event) => setName(event.target.value)}
-        />
-        <h2>✍️ Description: </h2>
-        <input
-          type="text"
-          placeholder="e.g. Even cooler than cryptokitties ;)"
-          onChange={(event) => setDescription(event.target.value)}
-        />
-      </form>
-      <button id="mintButton" onClick={onMintPressed}>
-        Mint NFT
-      </button>
-      <p id="status">
-        {status}
-      </p>
+      <div class="row justify-content-center">
+
+        <div class="col-12 col-lg-5">
+
+          <div>
+
+            <button class="btn btn-outline-light" id="walletButton" onClick={connectWalletPressed}>
+              {walletAddress.length > 0 ? (
+                "Connected: " +
+                String(walletAddress).substring(0, 6) +
+                "..." +
+                String(walletAddress).substring(38)
+              ) : (
+                <span>Connect Wallet</span>
+              )}
+            </button>
+
+          </div>
+
+          <div class="mt-5">
+            <img class="logo img-fluid" src="/logo.png" />
+          </div>
+          <div class="mt-5">
+            <form>
+              <h2>Number of Mints:</h2>
+              <input
+                class="form-control"
+                type="number"
+                placeholder="1"
+                onChange={(event) => setCount(event.target.value)}
+              />
+
+            </form>
+          </div>
+          <button class="btn btn-primary w-100" id="mintButton" onClick={onMintPressed}>
+            Mint NFT
+          </button>
+          <p id="status">
+            {status}
+          </p>
+        </div>
+
+      </div>
     </div>
   );
 };
